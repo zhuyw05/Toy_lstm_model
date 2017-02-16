@@ -4,13 +4,13 @@ import itertools
 import numpy as np
 np.random.seed(1337)  # for reproducibility
 
-# from keras.preprocessing import sequence
-# from keras.models import Sequential
-# from keras.layers import Dense, Dropout, Activation
-# from keras.layers import Embedding
-# from keras.layers import LSTM
-# from keras.layers import Convolution1D, MaxPooling1D
-# from keras.datasets import imdb
+from keras.preprocessing import sequence
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, Activation
+from keras.layers import Embedding
+from keras.layers import LSTM
+from keras.layers import Convolution1D, MaxPooling1D
+from keras.datasets import imdb
 import scipy.signal as sg
 from collections import Counter
 import matplotlib.pyplot as plt
@@ -20,7 +20,7 @@ class Generate_sample_data(object):
 	def __init__(self):
 		self.config_para()
 		# self.cgenerate_rule()
-		self.test()
+		# self.test()
 
 
 	def config_para(self):
@@ -31,7 +31,11 @@ class Generate_sample_data(object):
 		self.N_state_count=100
 		self.effect_length=40
 		self.decay_rate=0.95
-		self.noise_amplititude=2.8
+		self.noise_amplititude=1
+
+		self.ideal_count=0
+		self.ideal_correct_count=0
+
 		self.config_generate_rule()
 
 
@@ -49,20 +53,57 @@ class Generate_sample_data(object):
 
 	def generate_one_series(self):
 		the_random_state_list=np.random.randint(low=0,high=self.N_state_count,size=self.N_series_length)
-		print (len(the_random_state_list))
 		ideal_value=self.ideal_predict(the_random_state_list)
-		print (len(ideal_value))
-		noise=self.noise_amplititude*np.random.randn(self.N_series_length)
+		noise=self.noise_amplititude*np.random.randn(self.N_series_length)*np.std(ideal_value)
 		the_series=noise+ideal_value
-		return the_random_state_list,the_series
 
+		self.ideal_count+=len(the_series)
+		self.ideal_correct_count+=(sum(1+np.sign(the_series*ideal_value))/2)
+		return the_random_state_list,the_series
 	
 	def generate(self):
-		Train_data=[self.generate_one_series() for i in range(sele.N_series_train)]
-		Test_data=[self.generate_one_series() for i in range(sele.N_series_test)]
+		Train_data=[self.generate_one_series() for i in range(self.N_series_train)]
+		Test_data=[self.generate_one_series() for i in range(self.N_series_test)]
 		X_train,Y_train=[x[0] for x in Train_data],[x[1] for x in Train_data]
 		X_test,Y_test=[x[0] for x in Train_data],[x[1] for x in Train_data]
 
+		print (self.ideal_count,self.ideal_correct_count)
+		print ("ideal correct ratio",float(self.ideal_correct_count)/self.ideal_count)
+		return X_train,Y_train,X_test,Y_test
+
+class Train_by_LSTM(object):
+	"""docstring for Train_by_LSTM"""
+	def __init__(self):
+		self.config_hyper_para()
+		self.define_architecture()
+
+	def config_hyper_para(self):
+		self.max_features=100
+		self.embedding_size=8
+		self.input_length=1024
+		self.Drop_out_Embedding=0.25
+		self.lstm_output_size=1024
+		self.lstm_dropout_W=0.25
+		self.lstm_dropout_U=0.25
+
+	def define_architecture(self):
+		self.model=Sequential()
+		model.add(Embedding(self.max_features, self.embedding_size, input_length=self.input_length))
+		model.add(Dropout(self.Drop_out_Embedding))
+		model.add(LSTM(self.lstm_output_size,dropout_W=self.lstm_dropout_W,dropout_U=self.lstm_dropout_U))
+		model.compile(loss="mse",optimizer="sgd")
+
+
+
+
+		pass
+	def train_the_model(self):
+		pass
+	def perform_outsample_test(self):
+		pass
+	def launch_test(self):
+		pass
+		
 
 if __name__ == '__main__':
-	Generate_sample_data()
+	Generate_sample_data().generate()
