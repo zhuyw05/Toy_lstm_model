@@ -24,7 +24,7 @@ class Generate_sample_data(object):
 
 
 	def config_para(self):
-		self.N_series_train = 1024
+		self.N_series_train = 2048
 		self.N_series_test = 512
 
 		self.N_series_length=1024
@@ -76,6 +76,7 @@ class Train_by_LSTM(object):
 	def __init__(self):
 		self.config_hyper_para()
 		self.define_architecture()
+		self.train_the_model()
 
 	def config_hyper_para(self):
 		self.max_features=100
@@ -86,19 +87,28 @@ class Train_by_LSTM(object):
 		self.lstm_dropout_W=0.25
 		self.lstm_dropout_U=0.25
 
+		self.batch_size=32
+		self.Epochs=30
+
 	def define_architecture(self):
 		self.model=Sequential()
-		model.add(Embedding(self.max_features, self.embedding_size, input_length=self.input_length))
-		model.add(Dropout(self.Drop_out_Embedding))
-		model.add(LSTM(self.lstm_output_size,dropout_W=self.lstm_dropout_W,dropout_U=self.lstm_dropout_U))
-		model.compile(loss="mse",optimizer="sgd")
+		self.model.add(Embedding(self.max_features, self.embedding_size, input_length=self.input_length))
+		self.model.add(Dropout(self.Drop_out_Embedding))
+		self.model.add(LSTM(self.lstm_output_size,dropout_W=self.lstm_dropout_W,dropout_U=self.lstm_dropout_U))
+		self.model.compile(loss="mse",optimizer="sgd")
 
 
 
 
 		pass
 	def train_the_model(self):
-		pass
+		print('Train...')
+		X_train,Y_train,X_test,Y_test=Generate_sample_data().generate()
+		X_train = sequence.pad_sequences(X_train)
+		for i in range(self.Epochs):
+			print('Epoch', i, '/', self.Epochs)
+			self.model.fit(x=X_train,y=Y_train,batch_size=self.batch_size)
+
 	def perform_outsample_test(self):
 		pass
 	def launch_test(self):
@@ -106,4 +116,5 @@ class Train_by_LSTM(object):
 		
 
 if __name__ == '__main__':
-	Generate_sample_data().generate()
+	# Generate_sample_data().generate()
+	Train_by_LSTM()
