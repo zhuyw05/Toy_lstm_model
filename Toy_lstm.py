@@ -28,10 +28,10 @@ class Generate_sample_data(object):
 		self.N_series_test = 512
 
 		self.N_series_length=1024
-		self.N_state_count=100
+		self.N_state_count=2
 		self.effect_length=1
 		self.decay_rate=0.9
-		self.noise_amplititude=1
+		self.noise_amplititude=0.05
 
 		self.ideal_count=0
 		self.ideal_correct_count=0
@@ -40,7 +40,9 @@ class Generate_sample_data(object):
 
 
 	def config_generate_rule(self):
-		self.state_value_dict=dict(zip(range(self.N_state_count) , np.random.randn(self.N_state_count)))	
+		# self.state_value_dict=dict(zip(range(self.N_state_count) , np.random.randn(self.N_state_count)))	
+		self.state_value_dict={0:-1,1:1}
+		print ("self.state_value_dict",self.state_value_dict)
 		self.lasting_rule=np.random.randn(self.effect_length)*np.array([self.decay_rate**i for i in range(self.effect_length)])
 		self.lasting_rule[0]=1
 		# plt.plot(self.lasting_rule)
@@ -56,6 +58,8 @@ class Generate_sample_data(object):
 		ideal_value=self.ideal_predict(the_random_state_list)
 		noise=self.noise_amplititude*np.random.randn(self.N_series_length)*np.std(ideal_value)
 		the_series=noise+ideal_value
+		
+		
 
 		self.ideal_count+=len(the_series)
 		self.ideal_correct_count+=(sum(1+np.sign(the_series*ideal_value))/2)
@@ -84,20 +88,21 @@ class Train_by_LSTM(object):
 		self.train_the_model()
 
 	def config_hyper_para(self):
-		self.max_features=100
-		self.embedding_size=16
+		self.max_features=2
+		self.embedding_size=2
 		self.input_length=1024
 		self.Drop_out_Embedding=0.05
-		self.lstm_output_size=16
+		self.lstm_output_size=2
 		self.lstm_dropout_W=0.05
 		self.lstm_dropout_U=0.05
 
-		self.batch_size=256
-		self.Epochs=30
+		self.batch_size=1024
+		self.Epochs=300
 
 	def define_architecture(self):
 		self.model=Sequential()
-		self.model.add(Embedding(self.max_features, self.embedding_size, input_length=self.input_length))
+		self.model.add(Embedding(self.max_features,
+		self.embedding_size, input_length=self.input_length))
 		shape=self.model.output_shape
 		print ('Embedding ouput shape = '+str(shape));
 		self.model.add(Dropout(self.Drop_out_Embedding))
