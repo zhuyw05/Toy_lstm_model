@@ -69,6 +69,7 @@ class Generate_sample_data(object):
 
 		print (self.ideal_count,self.ideal_correct_count)
 		print ("ideal correct ratio",float(self.ideal_correct_count)/self.ideal_count)
+		print ("np.var(Y_test)",np.var(Y_test))
 		return X_train,Y_train,X_test,Y_test
 
 		
@@ -88,7 +89,7 @@ class Train_by_LSTM(object):
 		self.lstm_dropout_W=0.25
 		self.lstm_dropout_U=0.25
 
-		self.batch_size=32
+		self.batch_size=128
 		self.Epochs=30
 
 	def define_architecture(self):
