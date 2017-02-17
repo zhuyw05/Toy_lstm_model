@@ -87,10 +87,10 @@ class Train_by_LSTM(object):
 		self.max_features=100
 		self.embedding_size=16
 		self.input_length=1024
-		self.Drop_out_Embedding=0.25
+		self.Drop_out_Embedding=0.05
 		self.lstm_output_size=16
-		self.lstm_dropout_W=0.25
-		self.lstm_dropout_U=0.25
+		self.lstm_dropout_W=0.05
+		self.lstm_dropout_U=0.05
 
 		self.batch_size=256
 		self.Epochs=30
