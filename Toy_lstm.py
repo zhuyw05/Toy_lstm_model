@@ -89,7 +89,7 @@ class Train_by_LSTM(object):
 		self.lstm_dropout_U=0.25
 
 		self.batch_size=32
-		self.Epochs=10
+		self.Epochs=30
 
 	def define_architecture(self):
 		self.model=Sequential()
@@ -124,9 +124,8 @@ class Train_by_LSTM(object):
 		print ('X_train_shape = '+str(np.array(X_train).shape))
 		print ('Y_train_shape = '+str(np.array(Y_train).shape))
 		
-		for i in range(self.Epochs):
-			print('Epoch', i, '/', self.Epochs)
-			self.model.fit(x=X_train,y=Y_train,batch_size=self.batch_size)
+		
+		self.model.fit(x=X_train,y=Y_train,batch_size=self.batch_size,nb_epoch=self.Epochs)
 
 	def perform_outsample_test(self):
 		pass
