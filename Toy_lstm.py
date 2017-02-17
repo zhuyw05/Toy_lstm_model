@@ -89,7 +89,7 @@ class Train_by_LSTM(object):
 		self.lstm_dropout_W=0.25
 		self.lstm_dropout_U=0.25
 
-		self.batch_size=128
+		self.batch_size=256
 		self.Epochs=30
 
 	def define_architecture(self):
