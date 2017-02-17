@@ -29,8 +29,8 @@ class Generate_sample_data(object):
 
 		self.N_series_length=1024
 		self.N_state_count=100
-		self.effect_length=40
-		self.decay_rate=0.95
+		self.effect_length=10
+		self.decay_rate=0.9
 		self.noise_amplititude=1
 
 		self.ideal_count=0
@@ -85,10 +85,10 @@ class Train_by_LSTM(object):
 
 	def config_hyper_para(self):
 		self.max_features=100
-		self.embedding_size=8
+		self.embedding_size=16
 		self.input_length=1024
 		self.Drop_out_Embedding=0.25
-		self.lstm_output_size=8
+		self.lstm_output_size=16
 		self.lstm_dropout_W=0.25
 		self.lstm_dropout_U=0.25
 
