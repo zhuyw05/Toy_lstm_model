@@ -72,6 +72,9 @@ class Generate_sample_data(object):
 		print ("np.var(Y_test)",np.var(Y_test))
 		return X_train,Y_train,X_test,Y_test
 
+	def Compute_sinple_pred(self):
+		pass
+
 		
 class Train_by_LSTM(object):
 	"""docstring for Train_by_LSTM"""
@@ -82,10 +85,10 @@ class Train_by_LSTM(object):
 
 	def config_hyper_para(self):
 		self.max_features=100
-		self.embedding_size=50
+		self.embedding_size=8
 		self.input_length=1024
 		self.Drop_out_Embedding=0.25
-		self.lstm_output_size=50
+		self.lstm_output_size=8
 		self.lstm_dropout_W=0.25
 		self.lstm_dropout_U=0.25
 
