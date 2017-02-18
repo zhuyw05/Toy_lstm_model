@@ -16,6 +16,7 @@ import scipy.signal as sg
 from collections import Counter
 import matplotlib.pyplot as plt
    
+print ("caonima")
 class Generate_sample_data(object):
 	"""docstring for Generate_sample_data"""
 	def __init__(self):
