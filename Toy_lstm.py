@@ -57,9 +57,9 @@ class Generate_sample_data(object):
 
 	def generate_one_series(self):
 		the_random_state_list=np.random.randint(low=0,high=self.N_state_count,size=self.N_series_length) #1024
-		ideal_value=self.ideal_predict(the_random_state_list)
-		noise=self.noise_amplititude*np.random.randn(self.N_series_length)*np.std(ideal_value)
-		the_series=noise+ideal_value
+		self.ideal_value=self.ideal_predict(the_random_state_list)
+		self.noise=self.noise_amplititude*np.random.randn(self.N_series_length)*np.std(ideal_value)
+		the_series=self.noise+self.ideal_value
 		
 		
 
@@ -75,6 +75,7 @@ class Generate_sample_data(object):
 
 		print (self.ideal_count,self.ideal_correct_count)
 		print ("ideal correct ratio",float(self.ideal_correct_count)/self.ideal_count)
+		print ("ideal loss function",np.var(self.noise))
 		print ("np.var(Y_test)",np.var(Y_test))
 		return X_train,Y_train,X_test,Y_test
 
