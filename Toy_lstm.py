@@ -4,6 +4,7 @@ import itertools
 import numpy as np
 np.random.seed(1337)  # for reproducibility
 import keras
+print ("import keras!@!")
 from keras.preprocessing import sequence
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Activation,TimeDistributed,Flatten
