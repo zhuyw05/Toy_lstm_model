@@ -139,24 +139,14 @@ class Train_by_LSTM(object):
 		
 		
 		time.sleep(5)
-		self.model.fit(x=self.X_train,y=self.Y_train,batch_size=self.batch_size,nb_epoch=self.Epochs,callbacks=[My_outsample_test])
+		self.model.fit(x=self.X_train,y=self.Y_train,batch_size=self.batch_size,nb_epoch=self.Epochs)
 
 	def perform_outsample_test(self):
-		test_result=self.model.evaluate(self.X_test,self.Y_test, batch_size=self.batch_size)
+		test_result=self.model.evaluate(self.X_test,self.Y_test, batch_size=self.batch_size,validation_data=(self.X_test,self.Y_test))
 		print ("out-sample test_result",test_result)
 	def launch_test(self):
 		pass
-		
-class My_outsample_test(keras.callbacks.Callback):
-	"""docstring for My_outsample_test"""
-	def __init__(self, X_test,Y_test):
-		self.X_test,self.Y_test=X_test,Y_test
 
-	def on_epoch_end(self,*args):
-		test_result=self.model.evaluate(self.X_test,self.Y_test, batch_size=self.batch_size)
-		print ("args",args)
-
-		
 
 if __name__ == '__main__':
 	# Generate_sample_data().generate()
