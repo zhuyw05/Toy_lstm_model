@@ -95,13 +95,13 @@ class Train_by_LSTM(object):
 		self.max_features=10
 		self.embedding_size=5
 		self.input_length=1024
-		self.Drop_out_Embedding=0.05
+		self.Drop_out_Embedding=0.00
 		self.lstm_output_size=5
-		self.lstm_dropout_W=0.05
-		self.lstm_dropout_U=0.05
+		self.lstm_dropout_W=0.00
+		self.lstm_dropout_U=0.00
 
 		self.batch_size=2048
-		self.Epochs=300
+		self.Epochs=100
 
 	def define_architecture(self):
 		self.model=Sequential()
@@ -127,7 +127,6 @@ class Train_by_LSTM(object):
 
 		pass 
 	def train_the_model(self):
-		time.sleep(5)
 		print('Train...')
 		
 		X_train,Y_train,X_test,Y_test=Generate_sample_data().generate()
@@ -139,6 +138,7 @@ class Train_by_LSTM(object):
 		print ('Y_train_shape = '+str(np.array(self.Y_train).shape))
 		
 		
+		time.sleep(5)
 		self.model.fit(x=self.X_train,y=self.Y_train,batch_size=self.batch_size,nb_epoch=self.Epochs)
 
 	def perform_outsample_test(self):
