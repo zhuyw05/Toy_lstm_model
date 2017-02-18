@@ -4,7 +4,7 @@ import itertools
 import numpy as np
 np.random.seed(1337)  # for reproducibility
 import keras
-print ("import keras!@!")
+import time
 from keras.preprocessing import sequence
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Activation,TimeDistributed,Flatten
@@ -117,7 +117,7 @@ class Train_by_LSTM(object):
 		self.model.add(TimeDistributed(Dense(1, activation='linear')))
 		shape=self.model.output_shape
 		print ('final ouput shape = '+str(shape));
-		my_sgd=keras.optimizers.SGD(lr=0.75,momentum=0.5,decay=0.05,nesterov=False)
+		my_sgd=keras.optimizers.SGD(lr=0.3,momentum=0.5,decay=0.05,nesterov=False)
 		self.model.compile(loss="mse",optimizer=my_sgd)
 
  
@@ -125,6 +125,7 @@ class Train_by_LSTM(object):
 
 		pass 
 	def train_the_model(self):
+		time.sleep(5)
 		print('Train...')
 		
 		X_train,Y_train,X_test,Y_test=Generate_sample_data().generate()
