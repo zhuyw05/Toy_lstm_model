@@ -58,13 +58,13 @@ class Generate_sample_data(object):
 	def generate_one_series(self):
 		the_random_state_list=np.random.randint(low=0,high=self.N_state_count,size=self.N_series_length) #1024
 		self.ideal_value=self.ideal_predict(the_random_state_list)
-		self.noise=self.noise_amplititude*np.random.randn(self.N_series_length)*np.std(ideal_value)
+		self.noise=self.noise_amplititude*np.random.randn(self.N_series_length)*np.std(self.ideal_value)
 		the_series=self.noise+self.ideal_value
 		
 		
 
 		self.ideal_count+=len(the_series)
-		self.ideal_correct_count+=(sum(1+np.sign(the_series*ideal_value))/2)
+		self.ideal_correct_count+=(sum(1+np.sign(the_series*self.ideal_value))/2)
 		return the_random_state_list,the_series
 	
 	def generate(self):
