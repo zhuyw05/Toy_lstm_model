@@ -65,7 +65,7 @@ class Generate_sample_data(object):
 
 		self.ideal_count+=len(the_series)
 		self.ideal_correct_count+=(sum(1+np.sign(the_series*self.ideal_value))/2)
-		self.Ideal_loss_func_list.append(var(self.noise))
+		self.Ideal_loss_func_list.append(np.var(self.noise))
 		return the_random_state_list,the_series
 	
 	def generate(self):
