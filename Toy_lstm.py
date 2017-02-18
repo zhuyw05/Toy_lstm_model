@@ -89,6 +89,7 @@ class Train_by_LSTM(object):
 		self.config_hyper_para()
 		self.define_architecture()
 		self.train_the_model()
+		self.perform_outsample_test()
 
 	def config_hyper_para(self):
 		self.max_features=10
@@ -132,16 +133,17 @@ class Train_by_LSTM(object):
 		X_train,Y_train,X_test,Y_test=Generate_sample_data().generate()
 		Y_train=[[[yt] for yt in sample] for sample in Y_train]
 		Y_test=[[[yt] for yt in sample] for sample in Y_test]
-		X_train,Y_train,X_test,Y_test=np.array(X_train),np.array(Y_train),np.array(X_test),np.array(Y_test)
+		self.X_train,self.Y_train,self.X_test,self.Y_test=np.array(X_train),np.array(Y_train),np.array(X_test),np.array(Y_test)
 		
-		print ('X_train_shape = '+str(np.array(X_train).shape))
-		print ('Y_train_shape = '+str(np.array(Y_train).shape))
+		print ('X_train_shape = '+str(np.array(self.X_train).shape))
+		print ('Y_train_shape = '+str(np.array(self.Y_train).shape))
 		
 		
-		self.model.fit(x=X_train,y=Y_train,batch_size=self.batch_size,nb_epoch=self.Epochs)
+		self.model.fit(x=self.X_train,y=self.Y_train,batch_size=self.batch_size,nb_epoch=self.Epochs)
 
 	def perform_outsample_test(self):
-		pass
+		test_result=self.model.evaluate(self.X_test,self.y_test, batch_size=batch_size)
+		print ("test_result",test_result)
 	def launch_test(self):
 		pass
 		
