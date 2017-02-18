@@ -120,7 +120,7 @@ class Train_by_LSTM(object):
 		my_sgd=keras.optimizers.SGD(lr=0.15,momentum=0.1,decay=0.05,nesterov=False)
 		self.model.compile(loss="mse",optimizer=my_sgd)
 
-
+ 
 
 
 		pass
