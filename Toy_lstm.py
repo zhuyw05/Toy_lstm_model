@@ -31,7 +31,7 @@ class Generate_sample_data(object):
 
 		self.N_series_length=1024
 		self.N_state_count=10
-		self.effect_length=5
+		self.effect_length=10
 		self.decay_rate=0.9
 		self.noise_amplititude=0.75
 
