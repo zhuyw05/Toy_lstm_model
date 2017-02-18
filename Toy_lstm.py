@@ -3,8 +3,8 @@ import itertools
 
 import numpy as np
 np.random.seed(1337)  # for reproducibility
-import keras
 import time
+import keras
 from keras.preprocessing import sequence
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Activation,TimeDistributed,Flatten
@@ -47,6 +47,7 @@ class Generate_sample_data(object):
 		print ("self.state_value_dict",self.state_value_dict)
 		self.lasting_rule=np.random.randn(self.effect_length)*np.array([self.decay_rate**i for i in range(self.effect_length)])
 		self.lasting_rule[0]=1
+		print ("self.lasting_rule",self.lasting_rule)
 		# plt.plot(self.lasting_rule)
 		# plt.show()
 
