@@ -139,13 +139,19 @@ class Train_by_LSTM(object):
 		
 		
 		time.sleep(5)
-		self.model.fit(x=self.X_train,y=self.Y_train,batch_size=self.batch_size,nb_epoch=self.Epochs,callbacks=[keras.callbacks.LambdaCallback(on_epoch_end=lambda x:self.perform_outsample_test())])
+		self.model.fit(x=self.X_train,y=self.Y_train,batch_size=self.batch_size,nb_epoch=self.Epochs)
 
 	def perform_outsample_test(self):
 		test_result=self.model.evaluate(self.X_test,self.Y_test, batch_size=self.batch_size)
 		print ("out-sample test_result",test_result)
 	def launch_test(self):
 		pass
+		
+class My_outsample_test(object):
+	"""docstring for My_outsample_test"""
+	def __init__(self, arg):
+		super(My_outsample_test, self).__init__()
+		self.arg = arg
 		
 
 if __name__ == '__main__':
