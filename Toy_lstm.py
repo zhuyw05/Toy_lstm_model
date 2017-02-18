@@ -145,8 +145,9 @@ class Train_by_LSTM(object):
 		
 		
 		time.sleep(5)
-		my_early_stop=keras.callbacks.EarlyStopping(monitor='train_loss', min_delta=0, patience=20, verbose=0, mode='auto')
-		self.model.fit(x=self.X_train,y=self.Y_train,batch_size=self.batch_size,nb_epoch=self.Epochs,callbacks=[my_early_stop])
+		# my_early_stop=keras.callbacks.EarlyStopping(monitor='train_loss', min_delta=0, patience=20, verbose=0, mode='auto')
+		# self.model.fit(x=self.X_train,y=self.Y_train,batch_size=self.batch_size,nb_epoch=self.Epochs,callbacks=[my_early_stop])
+		self.model.fit(x=self.X_train,y=self.Y_train,batch_size=self.batch_size,nb_epoch=self.Epochs)
 
 	def perform_outsample_test(self):
 		print ("ideal_loss_func,var_Y",self.ideal_loss_func,self.var_Y)
