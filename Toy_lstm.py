@@ -123,7 +123,7 @@ class Train_by_LSTM(object):
  
 
 
-		pass
+		pass 
 	def train_the_model(self):
 		print('Train...')
 		
