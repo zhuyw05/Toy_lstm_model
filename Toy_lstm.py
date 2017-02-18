@@ -142,7 +142,7 @@ class Train_by_LSTM(object):
 		self.model.fit(x=self.X_train,y=self.Y_train,batch_size=self.batch_size,nb_epoch=self.Epochs)
 
 	def perform_outsample_test(self):
-		test_result=self.model.evaluate(self.X_test,self.y_test, batch_size=batch_size)
+		test_result=self.model.evaluate(self.X_test,self.Y_test, batch_size=batch_size)
 		print ("test_result",test_result)
 	def launch_test(self):
 		pass
