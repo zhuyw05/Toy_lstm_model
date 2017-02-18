@@ -149,5 +149,5 @@ class Train_by_LSTM(object):
 
 
 if __name__ == '__main__':
-	Generate_sample_data().generate()
-	# Train_by_LSTM()
+	# Generate_sample_data().generate()
+	Train_by_LSTM()
