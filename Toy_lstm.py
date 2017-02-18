@@ -101,7 +101,7 @@ class Train_by_LSTM(object):
 		self.lstm_dropout_U=0.00
 
 		self.batch_size=2048
-		self.Epochs=200
+		self.Epochs=400
 
 	def define_architecture(self):
 		self.model=Sequential()
@@ -119,7 +119,7 @@ class Train_by_LSTM(object):
 		self.model.add(TimeDistributed(Dense(1, activation='linear')))
 		shape=self.model.output_shape
 		print ('final ouput shape = '+str(shape));
-		my_sgd=keras.optimizers.SGD(lr=0.7,momentum=0.1,decay=0.00,nesterov=False)
+		my_sgd=keras.optimizers.SGD(lr=0.5,momentum=0.1,decay=0.00,nesterov=False)
 		self.model.compile(loss="mse",optimizer=my_sgd)
 
  
@@ -149,5 +149,5 @@ class Train_by_LSTM(object):
 
 
 if __name__ == '__main__':
-	# Generate_sample_data().generate()
-	Train_by_LSTM()
+	Generate_sample_data().generate()
+	# Train_by_LSTM()
