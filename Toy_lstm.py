@@ -101,7 +101,7 @@ class Train_by_LSTM(object):
 		self.lstm_dropout_U=0.00
 
 		self.batch_size=2048
-		self.Epochs=100
+		self.Epochs=200
 
 	def define_architecture(self):
 		self.model=Sequential()
