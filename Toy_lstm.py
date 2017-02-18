@@ -115,8 +115,8 @@ class Train_by_LSTM(object):
 		self.model.add(TimeDistributed(Dense(1, activation='linear')))
 		shape=self.model.output_shape
 		print ('final ouput shape = '+str(shape));
-		
-		self.model.compile(loss="mse",optimizer="sgd")
+		my_sgd=keras.optimizer.SGD(lr=0.05,momentum=0.1,decay=0.05,nesterov=False)
+		self.model.compile(loss="mse",optimizer=my_sgd)
 
 
 
