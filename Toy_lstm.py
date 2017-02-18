@@ -65,19 +65,25 @@ class Generate_sample_data(object):
 
 		self.ideal_count+=len(the_series)
 		self.ideal_correct_count+=(sum(1+np.sign(the_series*self.ideal_value))/2)
+		self.Ideal_loss_func_list.append(var(self.noise))
 		return the_random_state_list,the_series
 	
 	def generate(self):
+		self.Ideal_loss_func_list=[]
+
 		Train_data=[self.generate_one_series() for i in range(self.N_series_train)] #2048
 		Test_data=[self.generate_one_series() for i in range(self.N_series_test)] #512
 		X_train,Y_train=[x[0] for x in Train_data],[x[1] for x in Train_data]
 		X_test,Y_test=[x[0] for x in Train_data],[x[1] for x in Train_data]
 
+		ideal_loss_func=np.mean(self.Ideal_loss_func_list)
+		var_Y=np.var(Y_test)
+
 		print (self.ideal_count,self.ideal_correct_count)
 		print ("ideal correct ratio",float(self.ideal_correct_count)/self.ideal_count)
-		print ("ideal loss function",np.var(self.noise))
-		print ("np.var(Y_test)",np.var(Y_test))
-		return X_train,Y_train,X_test,Y_test
+		print ("ideal loss function",ideal_loss_func)
+		print ("np.var(Y_test)",var_Y)
+		return X_train,Y_train,X_test,Y_test,ideal_loss_func,var_Y
 
 	def Compute_sinple_pred(self):
 		pass
@@ -129,7 +135,7 @@ class Train_by_LSTM(object):
 	def train_the_model(self):
 		print('Train...')
 		
-		X_train,Y_train,X_test,Y_test=Generate_sample_data().generate()
+		X_train,Y_train,X_test,Y_test,self.ideal_loss_func,self.var_Y=Generate_sample_data().generate()
 		Y_train=[[[yt] for yt in sample] for sample in Y_train]
 		Y_test=[[[yt] for yt in sample] for sample in Y_test]
 		self.X_train,self.Y_train,self.X_test,self.Y_test=np.array(X_train),np.array(Y_train),np.array(X_test),np.array(Y_test)
@@ -139,9 +145,11 @@ class Train_by_LSTM(object):
 		
 		
 		time.sleep(5)
-		self.model.fit(x=self.X_train,y=self.Y_train,batch_size=self.batch_size,nb_epoch=self.Epochs)
+		my_early_stop=keras.callbacks.EarlyStopping(monitor='val_loss', min_delta=0, patience=20, verbose=0, mode='auto')
+		self.model.fit(x=self.X_train,y=self.Y_train,batch_size=self.batch_size,nb_epoch=self.Epochs,callbacks=[my_early_stop])
 
 	def perform_outsample_test(self):
+		print ("ideal_loss_func,var_Y",self.ideal_loss_func,self.var_Y)
 		test_result=self.model.evaluate(self.X_test,self.Y_test, batch_size=self.batch_size,validation_data=(self.X_test,self.Y_test))
 		print ("out-sample test_result",test_result)
 	def launch_test(self):
