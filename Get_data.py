@@ -37,6 +37,16 @@ def convert_hdf5_dt(dt_values):
 		dt_array.append(st + dt.timedelta(days=c-1))
 	return dt_array
 
+def Make_up_with(X,compensator=0,target_size=1000):
+	if len(X)>=target_size:
+		return X 
+	else:
+		To_compensate=[compensator for i in range(target_size-len(X))]
+		Result=To_compensate+X
+		return Result
+
+
+
 class Get_state_ret_data_from_one_folder(object):
 	def __init__(self, The_folder):
 		self.The_folder = The_folder
@@ -46,6 +56,7 @@ class Get_state_ret_data_from_one_folder(object):
 		self.Get_file_path_list()
 		self.Get_content()
 		self.Replace_state_to_num()
+		self.Normalize_size()
 		self.Compress_and_dump()
 
 	def Get_file_path_list(self):
@@ -76,22 +87,31 @@ class Get_state_ret_data_from_one_folder(object):
 			for state in self.Full_data_dict[stock_id]["State"]:
 				self.All_State_set.add(state)
 		print len(self.All_State_set)
-		The_state_num_map=dict([(state,i) for i,state in enumerate(sorted(self.All_State_set))])
-		print ("The_state_num_map",The_state_num_map)
+		The_state_num_map=dict([(state,i+1) for i,state in enumerate(sorted(self.All_State_set))])
+		print ("max(The_state_num_map.values())",max(The_state_num_map.values()))
+
 		for stock_id in sorted(self.Full_data_dict.keys()):
 			self.Full_data_dict[stock_id]["State"]=[The_state_num_map[state] for state in self.Full_data_dict[stock_id]["State"]]
+
+	def Normalize_size(self):
+		Max_length=max([len(x["State"]) for x in self.Full_data_dict.values()])
+		print ("Max_length",Max_length)
+		for stock in sorted(self.Full_data_dict.keys()):
+			self.Full_data_dict[stock]["State"]=Make_up_with(self.Full_data_dict[stock]["State"],0,Max_length)
+			self.Full_data_dict[stock]["Ret"]=Make_up_with(self.Full_data_dict[stock]["Ret"],0,Max_length)
+
 
 	def Compress_and_dump(self):
 
 		dumps=cPickle.dumps(self.Full_data_dict)
-		cPickle.dump(zlib.compress(dumps,9),open("zipped_data.data","w"))
+		cPickle.dump(zlib.compress(dumps,9),open("./Data/zipped_data.data","w"))
 
 		# h5 = pd.HDFStore('./Data/30_min.h5','w', complevel=4, complib='blosc')
 		# h5["data"]=pd.DataFrame(self.Full_data_dict)
 		# h5.close()
 
 		# cPickle.dump(zlib.compress(dumps,9),open("30_min_data.unzipeddata","w"))
-		
+
 
 
 # def Get_state_ret_data_from_one_folder(The_folder=""):

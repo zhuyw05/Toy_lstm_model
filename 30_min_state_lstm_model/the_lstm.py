@@ -16,21 +16,28 @@ from keras.datasets import imdb
 import scipy.signal as sg
 from collections import Counter
 import matplotlib.pyplot as plt
-   
+import itertools
 
+   
+def Chain(X):
+	return list(itertools.chain(*X))
 
 class Train_by_LSTM(object):
 	"""docstring for Train_by_LSTM"""
 	def __init__(self):
+		self.Load_data()
 		self.config_hyper_para()
 		self.define_architecture()
 		self.train_the_model()
 		# self.perform_outsample_test()
 
 	def config_hyper_para(self):
-		self.max_features=80
+
+		self.max_features=max([max(x) for x in self.X_train])+1
+		print ("self.max_features",self.max_features)
 		self.embedding_size=10
-		self.input_length=1024
+		self.input_length=max([len(x) for x in self.X_train])
+		print ("self.input_length",self.input_length)
 		self.Drop_out_Embedding=0.00
 		self.lstm_output_size=3
 		self.lstm_dropout_W=0.00
@@ -59,20 +66,21 @@ class Train_by_LSTM(object):
 		self.model.compile(loss="mse",optimizer=my_sgd)
 
  
-	def Load_data():
+	def Load_data(self):
 		the_target_file="../Data/zipped_data.data"
-		self.The_data_dict=cPickle.loads(zlib.decompress( pen(the_target_file,"r").read()))
+		The_str=cPickle.load(open(the_target_file,"r"))
+		Nice_str=zlib.decompress(The_str)
+		self.The_data_dict=cPickle.loads(Nice_str)
 		Stock_list=sorted(self.The_data_dict.keys())
-		X_train=[self.The_data_dict[stock]["State"] for stock in Stock_list]
-		Y_train=[self.The_data_dict[stock]["Ret"] for stock in Stock_list]
-		return X_train,Y_train
+		self.X_train=[self.The_data_dict[stock]["State"] for stock in Stock_list]
+		self.Y_train=[self.The_data_dict[stock]["Ret"] for stock in Stock_list]
+		print ("null model mse",np.var(Chain(self.Y_train)))
 
 	def train_the_model(self):
 		print('Train...')
 		
-		X_train,Y_train=self.Load_data()
-		Y_train=[[[yt] for yt in sample] for sample in Y_train]
-		self.X_train,self.Y_train=np.array(X_train),np.array(Y_train)
+		self.Y_train=[[[yt] for yt in sample] for sample in self.Y_train]
+		self.X_train,self.Y_train=np.array(self.X_train),np.array(self.Y_train)
 		
 		print ('X_train_shape = '+str(np.array(self.X_train).shape))
 		print ('Y_train_shape = '+str(np.array(self.Y_train).shape))
