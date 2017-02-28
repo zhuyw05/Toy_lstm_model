@@ -68,9 +68,9 @@ class Train_by_LSTM(object):
  
 	def Load_data(self):
 		the_target_file="../Data/zipped_data.data"
-		The_str=cPickle.load(open(the_target_file,"r"))
+		The_str=pickle.load(open(the_target_file,"r"))
 		Nice_str=zlib.decompress(The_str)
-		self.The_data_dict=cPickle.loads(Nice_str)
+		self.The_data_dict=pickle.loads(Nice_str)
 		Stock_list=sorted(self.The_data_dict.keys())
 		self.X_train=[self.The_data_dict[stock]["State"] for stock in Stock_list]
 		self.Y_train=[[1e4*x for x in self.The_data_dict[stock]["Ret"]] for stock in Stock_list]
