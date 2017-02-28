@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import cPickle
+import pickle
 import os
 import pandas as pd
 import h5py
@@ -72,7 +72,7 @@ class Get_state_ret_data_from_one_folder(object):
 			stock_id=full_path.split("/")[-1][:8]
 			self.Full_data_dict[stock_id]={"State":[],"Ret":[]}
 			print (stock_id)
-			comps = read_hdf5(hdf5file, 'CompInfos_16')
+			comps = read_hdf5(full_path, 'CompInfos_16')
 			N=len(comps["Close"])
 			for i in range(3,N-1):
 				ret=comps["Close"][i+1]/comps["Close"][i]-1
@@ -103,8 +103,8 @@ class Get_state_ret_data_from_one_folder(object):
 
 	def Compress_and_dump(self):
 
-		dumps=cPickle.dumps(self.Full_data_dict)
-		cPickle.dump(zlib.compress(dumps,9),open("./Data/zipped_data.data","w"))
+		dumps=pickle.dumps(self.Full_data_dict)
+		pickle.dump(zlib.compress(dumps,9),open("./Data/zipped_data.data","w"))
 
 		# h5 = pd.HDFStore('./Data/30_min.h5','w', complevel=4, complib='blosc')
 		# h5["data"]=pd.DataFrame(self.Full_data_dict)
@@ -148,7 +148,7 @@ def Operate_script():
 
 	
 if __name__ == "__main__":
-	hdf5file = r'Z:\HDF5\compinfos\Normal\Stock\HalfHour_true\SH600005_201001_201703_30mins_HDF5_True.h5'
+	# hdf5file = r'Z:\HDF5\compinfos\Normal\Stock\HalfHour_true\SH600005_201001_201703_30mins_HDF5_True.h5'
 	# segs = read_hdf5(hdf5file, 'Segments_16')
 	# print(segs.head(10))
 
@@ -158,7 +158,7 @@ if __name__ == "__main__":
 	# tps = read_hdf5(hdf5file, 'TradePoints_16')
 	# print(tps.head(10))
 
-	comps = read_hdf5(hdf5file, 'CompInfos_16')
+	# comps = read_hdf5(hdf5file, 'CompInfos_16')
 	# print(comps.head(6))
 	# print (len(comps["Close"]))
 	Operate_script()
