@@ -103,8 +103,7 @@ class Get_state_ret_data_from_one_folder(object):
 
 	def Compress_and_dump(self):
 
-		dumps=pickle.dumps(self.Full_data_dict)
-		pickle.dump(zlib.compress(dumps,9),open("./Data/zipped_data.data","w"))
+		pickle.dump(self.Full_data_dict,open("./Data/zipped_data.data","w"))
 
 		# h5 = pd.HDFStore('./Data/30_min.h5','w', complevel=4, complib='blosc')
 		# h5["data"]=pd.DataFrame(self.Full_data_dict)
