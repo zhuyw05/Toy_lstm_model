@@ -73,7 +73,7 @@ class Train_by_LSTM(object):
 		self.The_data_dict=cPickle.loads(Nice_str)
 		Stock_list=sorted(self.The_data_dict.keys())
 		self.X_train=[self.The_data_dict[stock]["State"] for stock in Stock_list]
-		self.Y_train=[self.The_data_dict[stock]["Ret"] for stock in Stock_list]
+		self.Y_train=[[1e4*x for x in self.The_data_dict[stock]["Ret"]] for stock in Stock_list]
 		print ("null model mse",np.var(Chain(self.Y_train)))
 
 	def train_the_model(self):
