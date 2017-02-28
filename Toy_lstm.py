@@ -75,7 +75,7 @@ class Generate_sample_data(object):
 		Train_data=[self.generate_one_series() for i in range(self.N_series_train)] #2048
 		Test_data=[self.generate_one_series() for i in range(self.N_series_test)] #512
 		X_train,Y_train=[x[0] for x in Train_data],[x[1] for x in Train_data]
-		X_test,Y_test=[x[0] for x in Train_data],[x[1] for x in Train_data]
+		X_test,Y_test=[x[0] for x in Test_data],[x[1] for x in Test_data]
 
 		ideal_loss_func=np.mean(self.Ideal_loss_func_list)
 		var_Y=np.var(Y_test)
