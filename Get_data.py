@@ -103,43 +103,23 @@ class Get_state_ret_data_from_one_folder(object):
 
 	def Compress_and_dump(self):
 
-		pickle.dump(self.Full_data_dict,open("./Data/zipped_data.data","w"))
+		# pickle.dump(self.Full_data_dict,open("./Data/zipped_data.data","w"))
 
-		# h5 = pd.HDFStore('./Data/30_min.h5','w', complevel=4, complib='blosc')
+		h5 = pd.HDFStore('./Data/30_min.h5','w', complevel=4, complib='blosc')
+		for stock_id in sorted(self.Full_data_dict.keys()):
+			h5[stock_id]=pd.DataFrame(self.Full_data_dict[stock_id])
 		# h5["data"]=pd.DataFrame(self.Full_data_dict)
-		# h5.close()
+		h5.close()
 
+		To_load_hdf5= pd.HDFStore('./Data/30_min.h5')
+		print ("To_load_hdf5['SZ000936']",To_load_hdf5["SZ000936"])
 		# cPickle.dump(zlib.compress(dumps,9),open("30_min_data.unzipeddata","w"))
 
 
-
-# def Get_state_ret_data_from_one_folder(The_folder=""):
-# 	Full_path_list=[]
-# 	for _,_,file_path_list in os.walk(The_folder):
-# 		for file_name in file_path_list:
-# 			full_path=The_folder+"/"+file_name
-# 			Full_path_list.append(full_path)
-# 	print len(Full_path_list)
-# 	Full_data_dict={}
-# 	for i,full_path in enumerate(Full_path_list):
-# 		print (i,len(Full_path_list))
-# 		stock_id=full_path.split("/")[-1][:8]
-# 		Full_data_dict[stock_id]=[[],[]]
-# 		print stock_id
-# 		comps = read_hdf5(hdf5file, 'CompInfos_16')
-# 		N=len(comps["Close"])
-# 		for i in range(3,N-1):
-# 			ret=comps["Close"][i+1]/comps["Close"][i]-1
-# 			state=comps["Symbol"]
-# 			Full_data_dict[stock_id][0].append(state)
-# 			Full_data_dict[stock_id][1].append(ret)
-
-# 	
-# 	for stock_id in sorted(Full_data_dict)
-
-
-# 	cPickle.dump(Full_data_dict,open("./Dump_dict","w"))
-
+def Check_load_data():
+	To_load_hdf5= pd.HDFStore('./Data/30_min.h5')
+	print (dir(To_load_hdf5))
+	print (To_load_hdf5.keys())
 
 
 def Operate_script():
@@ -160,4 +140,6 @@ if __name__ == "__main__":
 	# comps = read_hdf5(hdf5file, 'CompInfos_16')
 	# print(comps.head(6))
 	# print (len(comps["Close"]))
-	Operate_script()
+	# Operate_script()
+
+	Check_load_data()

@@ -67,11 +67,12 @@ class Train_by_LSTM(object):
 
  
 	def Load_data(self):
-		the_target_file="../Data/zipped_data.data"
-		self.The_data_dict=pickle.load(open(the_target_file,"r"))
-		Stock_list=sorted(self.The_data_dict.keys())
-		self.X_train=[self.The_data_dict[stock]["State"] for stock in Stock_list]
-		self.Y_train=[[1e4*x for x in self.The_data_dict[stock]["Ret"]] for stock in Stock_list]
+		the_target_file="../Data/30_min.h5"
+		To_load_hdf5= pd.HDFStore(the_target_file)
+		Stock_list=sorted(To_load_hdf5.keys())
+		self.X_train=[To_load_hdf5[stock]["State"] for stock in Stock_list]
+		self.Y_train=[[1e4*x for x in self.To_load_hdf5[stock]["Ret"]] for stock in Stock_list]
+	
 		print ("null model mse",np.var(Chain(self.Y_train)))
 
 	def train_the_model(self):
