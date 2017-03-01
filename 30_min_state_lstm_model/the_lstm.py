@@ -35,15 +35,15 @@ class Train_by_LSTM(object):
 
 		self.max_features=max([max(x) for x in self.X_train])+1
 		print ("self.max_features",self.max_features)
-		self.embedding_size=10
+		self.embedding_size=20
 		self.input_length=max([len(x) for x in self.X_train])
 		print ("self.input_length",self.input_length)
 		self.Drop_out_Embedding=0.00
-		self.lstm_output_size=3
+		self.lstm_output_size=10
 		self.lstm_dropout_W=0.00
 		self.lstm_dropout_U=0.00
 
-		self.batch_size=32
+		self.batch_size=64
 		self.Epochs=400
 
 	def define_architecture(self):
