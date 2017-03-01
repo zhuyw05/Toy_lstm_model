@@ -71,7 +71,7 @@ class Train_by_LSTM(object):
 		To_load_hdf5= pd.HDFStore(the_target_file)
 		Stock_list=sorted(To_load_hdf5.keys())
 		self.X_train=[To_load_hdf5[stock]["State"] for stock in Stock_list]
-		self.Y_train=[[1e4*x for x in self.To_load_hdf5[stock]["Ret"]] for stock in Stock_list]
+		self.Y_train=[[1e4*x for x in To_load_hdf5[stock]["Ret"]] for stock in Stock_list]
 	
 		print ("null model mse",np.var(Chain(self.Y_train)))
 
