@@ -1,0 +1,22 @@
+20170303----------------------------------
+依电话中所说，我们做了几个改动
+ lstm_output_size 10->20   ;   embedding_size 20->40   ;    输出层activation='linear' -> 'sigmoid'
+ 除了数据量800->3000暂时没做
+ 其余做了  结果如下
+--------------------------------------------
+（50epochs）603/603 [==============================] - 19s - loss: 0.0524 - val_loss: 0.0551
+并不比n-gram更好
+--------------------------------------------
+ 作为对比，N-gram模型结果
+ ('gram_N:', 1)
+('len(self.N_gram_mean_model)', 89)
+('Insampe mse', 0.049229446520198818)
+('len(Error_list),np.var(Error_list)', 256878, 0.051837584474590588)
+('gram_N:', 2)
+('len(self.N_gram_mean_model)', 210)
+('Insampe mse', 0.049161565275689316)
+('len(Error_list),np.var(Error_list)', 256677, 0.051774193715237879)
+('gram_N:', 3)
+('len(self.N_gram_mean_model)', 363)
+('Insampe mse', 0.049127009487933491)
+('len(Error_list),np.var(Error_list)', 256476, 0.051762466798997007)
