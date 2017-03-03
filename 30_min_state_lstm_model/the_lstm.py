@@ -35,16 +35,16 @@ class Train_by_LSTM(object):
 
 		self.max_features=max([max(x) for x in self.X_train])+1
 		print ("self.max_features",self.max_features)
-		self.embedding_size=20
+		self.embedding_size=40
 		self.input_length=max([len(x) for x in self.X_train])
 		print ("self.input_length",self.input_length)
 		self.Drop_out_Embedding=0.00
-		self.lstm_output_size=10
+		self.lstm_output_size=20
 		self.lstm_dropout_W=0.00
 		self.lstm_dropout_U=0.00
 
 		self.batch_size=64
-		self.Epochs=400
+		self.Epochs=50
 
 	def define_architecture(self):
 		self.model=Sequential()
@@ -59,10 +59,12 @@ class Train_by_LSTM(object):
 		shape=self.model.output_shape
 		
 		print ('LSTM ouput shape = '+str(shape));
-		self.model.add(TimeDistributed(Dense(1, activation='linear')))
+		# self.model.add(TimeDistributed(Dense(1, activation='linear')))
+		self.model.add(TimeDistributed(Dense(1, activation='sigmoid')))
+		
 		shape=self.model.output_shape
 		print ('final ouput shape = '+str(shape));
-		my_sgd=keras.optimizers.SGD(lr=0.08,momentum=0.1,decay=0.00,nesterov=False)
+		my_sgd=keras.optimizers.SGD(lr=0.05,momentum=0.1,decay=0.00,nesterov=False)
 		self.model.compile(loss="mse",optimizer=my_sgd)
 
  
@@ -86,7 +88,7 @@ class Train_by_LSTM(object):
 		
 		
 		time.sleep(5)
-		my_early_stop=keras.callbacks.EarlyStopping(monitor='val_loss', min_delta=0, patience=20, verbose=0, mode='auto')
+		my_early_stop=keras.callbacks.EarlyStopping(monitor='val_loss', min_delta=0, patience=5, verbose=0, mode='auto')
 		self.model.fit(x=self.X_train,y=self.Y_train,batch_size=self.batch_size,nb_epoch=self.Epochs,callbacks=[my_early_stop],validation_split=0.25)
 		# self.model.fit(x=self.X_train,y=self.Y_train,batch_size=self.batch_size,nb_epoch=self.Epochs)
 
