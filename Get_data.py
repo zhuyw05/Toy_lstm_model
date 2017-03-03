@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-
+import itertools
+import numpy as np 
 import pickle
 import os
 import pandas as pd
@@ -7,6 +8,24 @@ import h5py
 import datetime as dt
 import zlib
 
+def describe_quantile(X,A=[0.01,0.05,0.1,0.25,0.5,0.75,0.9,0.95,0.99],Print=False):
+	print "mean",np.mean(X)
+	X=sorted(X)
+	N=len(X)
+	Result=[]
+	for a in A:
+		if Print:
+			print "{}% , {}".format(int(a*100),round(X[int(a*N)],4))
+		Result.append(round(X[int(a*N)],4))
+	if Print:
+		print "min,{}".format(min(X))
+		print "max,{}".format(max(X))
+		print "mean/std",map(lambda x:round(x,5),[np.mean(X),np.std(X)])
+		print "\n"
+	return Result
+
+def Chain(X):
+	return list(itertools.chain(*X))
 
 def read_hdf5(file_path, node_name):
 	f = h5py.File(file_path, 'r')
@@ -56,6 +75,7 @@ class Get_state_ret_data_from_one_folder(object):
 		self.Get_file_path_list()
 		self.Get_content()
 		self.Replace_state_to_num()
+		self.Normalize_Ret()
 		self.Normalize_size()
 		self.Compress_and_dump()
 
@@ -100,6 +120,24 @@ class Get_state_ret_data_from_one_folder(object):
 			self.Full_data_dict[stock]["State"]=Make_up_with(self.Full_data_dict[stock]["State"],0,Max_length)
 			self.Full_data_dict[stock]["Ret"]=Make_up_with(self.Full_data_dict[stock]["Ret"],0,Max_length)
 
+	def Normalize_Ret(self):
+		Whole_Ret_list=Chain([self.Full_data_dict[stock]["Ret"] for stock in self.Full_data_dict.keys()])
+		print ("len(Whole_Ret_list)",len(Whole_Ret_list))
+
+		print ("describe_quantile(Whole_Ret_list)",describe_quantile(Whole_Ret_list,A=[0.0001,0.001,0.01,0.05,0.1,0.25,0.5,0.75,0.9,0.95,0.99,0.999,0.9999],Print=True))
+		print ("min(Whole_Ret_list),max(Whole_Ret_list)",min(Whole_Ret_list),max(Whole_Ret_list))
+		winsorize_func=lambda x:min(max(x,-0.03),0.03)
+		Winsorize_Whole_ret_list=map(winsorize_func,Whole_Ret_list)
+		
+		the_mean=np.mean(Winsorize_Whole_ret_list)
+		the_dist=max(max(Winsorize_Whole_ret_list)-the_mean,the_mean-min(Winsorize_Whole_ret_list))
+		print ("the_mean,the_dist",the_mean,the_dist)
+
+		the_trans_func=lambda x:(x-the_mean)/(the_dist/0.5)+0.5
+		Trans_Whole_ret=map(the_trans_func,Winsorize_Whole_ret_list)
+		print ("np.mean(Trans_Whole_ret),max(Trans_Whole_ret),min(Trans_Whole_ret)",np.mean(Trans_Whole_ret),max(Trans_Whole_ret),min(Trans_Whole_ret))
+		for stock in sorted(self.Full_data_dict.keys()):
+			self.Full_data_dict[stock]["Ret"]=[the_trans_func(winsorize_func(x)) for x in self.Full_data_dict[stock]["Ret"]]
 
 	def Compress_and_dump(self):
 
@@ -140,6 +178,6 @@ if __name__ == "__main__":
 	# comps = read_hdf5(hdf5file, 'CompInfos_16')
 	# print(comps.head(6))
 	# print (len(comps["Close"]))
-	# Operate_script()
+	Operate_script()
 
-	Check_load_data()
+	# Check_load_data()
